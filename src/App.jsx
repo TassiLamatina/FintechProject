@@ -9,12 +9,14 @@ import { getBalances, getContributions, getMarketPulse, getRecentActivity } from
  // <-- my "fake Schwab API"
 
 function App() {
-  // React state: keeps track of balances + contributions after "fetching"
+   // React state: keeps track of balances + contributions after "fetching"
   const [balances, setBalances] = useState(null);
   const [contributions, setContributions] = useState(null);
   const [marketPulse, setMarketPulse] = useState(null);
   const [recentActivity, setRecentActivity] = useState(null);
-   const IRA_LIMIT = 7000; // 2025 IRA limit (single filer demo)
+  const [sessionExpired, setSessionExpired] = useState(false); // 👈 NEW
+
+  const IRA_LIMIT = 7000; // 2025 IRA limit (single filer demo)
 
   const ytdTotal = contributions
     ? contributions.reduce((sum, c) => sum + c.amount, 0)
@@ -22,22 +24,29 @@ function App() {
 
   const progressPct = Math.min(100, Math.round((ytdTotal / IRA_LIMIT) * 100));
 
-
   // useEffect = “run this when the component shows up”
-useEffect(() => {
-  (async () => {
-    const b = await getBalances();
-    const c = await getContributions();
-    const m = await getMarketPulse(); 
-    const a = await getRecentActivity();
-setRecentActivity(a);
+  useEffect(() => {
+    (async () => {
+      try {
+        const b = await getBalances();
+        const c = await getContributions();
+        const m = await getMarketPulse();
+        const a = await getRecentActivity();
 
+        setBalances(b);
+        setContributions(c);
+        setMarketPulse(m);
+        setRecentActivity(a);
+      } catch (err) {
+        if (err.code === 401) {
+          setSessionExpired(true); // 👈 triggers banner
+        } else {
+          console.error("API error:", err);
+        }
+      }
+    })();
+  }, []);
 
-    setBalances(b);
-    setContributions(c);
-    setMarketPulse(m); // 👈 new line
-  })();
-}, []);
 
   // inline styles because CSS files are too serious for a weekend hack
  const container = {
@@ -81,25 +90,59 @@ setRecentActivity(a);
     marginBottom: "16px",
   };
 
-  return (
-    <div style={container}>
-      {/* Header */}
-      <header style={header}>
-        <div>
-          <div style={title}>IRA Snapshot</div>
-          <div style={subtitle}>
-            Weekend prototype: Connect button doesn’t *really* connect yet
-          </div>
-        </div>
+return (
+  <div style={container}>
+    {/* Auth / status banner (shown after clicking Connect, or on 401) */}
+    {sessionExpired && (
+      <div
+        style={{
+          background: "#fef9c3", // soft yellow
+          color: "#854d0e",      // amber text
+          padding: "12px 16px",
+          borderRadius: "8px",
+          marginBottom: "16px",
+          fontSize: "14px",
+          fontWeight: 500,
+        }}
+      >
+        Waiting for Schwab to authorize API request…{" "}
         <button
-          style={button}
-          onClick={() =>
-            alert("Pretend this is Schwab OAuth. Right now it’s just a popup.")
-          }
+          onClick={() => alert("Reconnect flow would start here")}
+          style={{
+            background: "transparent",
+            border: "none",
+            color: "#854d0e",
+            textDecoration: "underline",
+            cursor: "pointer",
+            padding: 0,
+            font: "inherit",
+          }}
         >
-          Connect
+          reconnect
         </button>
-      </header>
+      </div>
+    )}
+
+    {/* Header */}
+    <header style={header}>
+      <div>
+        <div style={title}>IRA Snapshot</div>
+        <div style={subtitle}>
+          Weekend prototype: Connect button doesn’t *really* connect yet
+        </div>
+      </div>
+      <button
+        style={button}
+        onClick={() => {
+          // In production: kick off Schwab OAuth (PKCE).
+          // Demo mode: show the “waiting for authorization” banner.
+          setSessionExpired(true);
+        }}
+      >
+        Connect
+      </button>
+    </header>
+
 
       <main>
         {/* Balances card */}
