@@ -103,8 +103,6 @@ Create a `.env.local` file (optional but realistic):
 
 ## Screenshots
 
-> Add screenshots for visual context. Place images in `docs/` and reference them here.
-
 <p align="center">
   <img src="public/docs/stillFintech.png" alt="Dashboard overview" width="720">
 </p>
