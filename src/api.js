@@ -16,19 +16,19 @@ const mockBalances = {
 const mockContributions = [
   { date: "2025-01-15", amount: 500 },   // new year, new me
   { date: "2025-03-20", amount: 1000 },  // responsible streak
-  { date: "2025-07-10", amount: 2000 },  // tax refund flex 💪
+  { date: "2025-07-10", amount: 2000 },  // tax refund flex 
 ];
 
 // --- Fake Market Pulse (random stocks, weekend fantasy edition) ---
 const mockMarketPulse = [
   { ticker: "TSLA", change: "+2.3%", headline: "Elon tweets something wild again 🚀" },
-  { ticker: "AMZN", change: "-0.8%", headline: "Prime Day hangover sale slump" },
-  { ticker: "NVDA", change: "+5.6%", headline: "AI hype train still full speed ahead 🤖" },
+  { ticker: "IRA", change: "-0.8%", headline: "Roth still not a guy 👔" },
+  { ticker: "ACH", change: "+5.6%", headline: "Still pending 🐢" },
 ];
 
 // --- Fake Recent Activity (tiny timeline so it feels real) ---
 const mockRecentActivity = [
-  { id: "t-001", date: "2025-07-10", type: "contribution", amount: 2000, note: "Tax refund victory lap 💸" },
+  { id: "t-001", date: "2025-07-10", type: "contribution", amount: 2000, note: "Tax refund victory lap" },
   { id: "t-002", date: "2025-04-12", type: "dividend", amount: 42.12, note: "ETF sprinkled some pennies" },
   { id: "t-003", date: "2025-03-20", type: "contribution", amount: 1000, note: "Consistency > intensity" },
 ];
