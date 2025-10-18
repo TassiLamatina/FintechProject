@@ -106,11 +106,11 @@ Create a `.env.local` file (optional but realistic):
 > Add screenshots for visual context. Place images in `docs/` and reference them here.
 
 <p align="center">
-  <img src="docs/screenshot-dashboard.png" alt="Dashboard overview" width="720">
+  <img src="public/docs/stillFintech.png" alt="Dashboard overview" width="720">
 </p>
 
 <p align="center">
-  <img src="docs/screenshot-banner.png" alt="Auth banner / Connect flow" width="720">
+  <img src="public/docs/bannerFintech.png" alt="Auth banner / Connect flow" width="720">
 </p>
 
 ---
