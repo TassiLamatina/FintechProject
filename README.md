@@ -104,11 +104,11 @@ Create a `.env.local` file (optional but realistic):
 ## Screenshots
 
 <p align="center">
-  <img src="public/docs/stillFintech.png" alt="Dashboard overview" width="720">
+  <img src="public/docs/stillFintech.png" alt="Dashboard overview" width="520">
 </p>
 
 <p align="center">
-  <img src="public/docs/bannerFintech.png" alt="Auth banner / Connect flow" width="720">
+  <img src="public/docs/bannerFintech.png" alt="Auth banner / Connect flow" width="520">
 </p>
 
 ---
