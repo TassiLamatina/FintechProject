@@ -4,7 +4,8 @@
 // but really it’s just fake data I stapled together.
 
 import { useState, useEffect } from "react";
-import { getBalances, getContributions, getMarketPulse } from "./api";
+import { getBalances, getContributions, getMarketPulse, getRecentActivity } from "./api";
+
  // <-- my "fake Schwab API"
 
 function App() {
@@ -12,13 +13,25 @@ function App() {
   const [balances, setBalances] = useState(null);
   const [contributions, setContributions] = useState(null);
   const [marketPulse, setMarketPulse] = useState(null);
+  const [recentActivity, setRecentActivity] = useState(null);
+   const IRA_LIMIT = 7000; // 2025 IRA limit (single filer demo)
+
+  const ytdTotal = contributions
+    ? contributions.reduce((sum, c) => sum + c.amount, 0)
+    : 0;
+
+  const progressPct = Math.min(100, Math.round((ytdTotal / IRA_LIMIT) * 100));
+
 
   // useEffect = “run this when the component shows up”
 useEffect(() => {
   (async () => {
     const b = await getBalances();
     const c = await getContributions();
-    const m = await getMarketPulse(); // 👈 new line
+    const m = await getMarketPulse(); 
+    const a = await getRecentActivity();
+setRecentActivity(a);
+
 
     setBalances(b);
     setContributions(c);
@@ -120,6 +133,35 @@ useEffect(() => {
           <h2 style={{ fontSize: 18, margin: 0, marginBottom: 8, fontWeight: 600 }}>
             YTD Contributions
           </h2>
+          {/* YTD progress toward IRA limit */}
+<div style={{ margin: "8px 0 12px" }}>
+  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, marginBottom: 6 }}>
+    <span>${ytdTotal.toLocaleString()} of ${IRA_LIMIT.toLocaleString()}</span>
+    <span>{progressPct}%</span>
+  </div>
+  <div
+    role="progressbar"
+    aria-valuenow={progressPct}
+    aria-valuemin={0}
+    aria-valuemax={100}
+    style={{
+      height: 10,
+      background: "#e5e7eb",
+      borderRadius: 999,
+      overflow: "hidden",
+      outline: "1px solid #e5e7eb",
+    }}
+  >
+    <div
+      style={{
+        width: `${progressPct}%`,
+        height: "100%",
+        background: "#0f172a",
+      }}
+    />
+  </div>
+</div>
+
           {contributions ? (
             <ul>
               {contributions.map((c, idx) => (
@@ -150,6 +192,25 @@ useEffect(() => {
     <p>Loading market vibes…</p>
   )}
 </section>
+
+{/* Recent Activity card */}
+<section style={card}>
+  <h2 style={{ fontSize: 18, margin: 0, marginBottom: 8, fontWeight: 600 }}>
+    Recent Activity
+  </h2>
+  {recentActivity ? (
+    <ul>
+      {recentActivity.map((tx) => (
+        <li key={tx.id}>
+          {tx.date} — {tx.type} of ${tx.amount} <em>({tx.note})</em>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p>Loading activity…</p>
+  )}
+</section>
+
       </main>
     </div>
   );

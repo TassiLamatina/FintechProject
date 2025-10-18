@@ -1,4 +1,3 @@
-// src/api.js
 // Weekend hack: pretending I have Schwab API creds. I do not. 😅
 // So we mock. Clean shapes, easy to swap for real endpoints later.
 
@@ -20,20 +19,6 @@ const mockContributions = [
   { date: "2025-07-10", amount: 2000 },  // tax refund flex 💪
 ];
 
-// Flag for demo mode. Flip to false when wiring real fetch calls.
-const useMocks = true;
-
-// Public API: looks like a real data layer, smells like a real data layer.
-export async function getBalances() {
-  if (useMocks) return mockBalances;
-  // TODO: return fetch('/api/accounts', { credentials: 'include' }).then(r => r.json());
-}
-
-export async function getContributions() {
-  if (useMocks) return mockContributions;
-  // TODO: return fetch('/api/transactions?type=contribution&year=2025', { credentials: 'include' }).then(r => r.json());
-}
-
 // --- Fake Market Pulse (random stocks, weekend fantasy edition) ---
 const mockMarketPulse = [
   { ticker: "TSLA", change: "+2.3%", headline: "Elon tweets something wild again 🚀" },
@@ -41,8 +26,29 @@ const mockMarketPulse = [
   { ticker: "NVDA", change: "+5.6%", headline: "AI hype train still full speed ahead 🤖" },
 ];
 
-// Public API for Market Pulse
+// --- Fake Recent Activity (tiny timeline so it feels real) ---
+const mockRecentActivity = [
+  { id: "t-001", date: "2025-07-10", type: "contribution", amount: 2000, note: "Tax refund victory lap 💸" },
+  { id: "t-002", date: "2025-04-12", type: "dividend", amount: 42.12, note: "ETF sprinkled some pennies" },
+  { id: "t-003", date: "2025-03-20", type: "contribution", amount: 1000, note: "Consistency > intensity" },
+];
+
+// Flag for demo mode. Flip to false when wiring real fetch calls.
+const useMocks = true;
+
+// Public API: looks like a real data layer, smells like a real data layer.
+export async function getBalances() {
+  if (useMocks) return mockBalances;
+}
+
+export async function getContributions() {
+  if (useMocks) return mockContributions;
+}
+
 export async function getMarketPulse() {
   if (useMocks) return mockMarketPulse;
-  // TODO: replace with fetch('/api/market/pulse').then(r => r.json());
+}
+
+export async function getRecentActivity() {
+  if (useMocks) return mockRecentActivity;
 }
