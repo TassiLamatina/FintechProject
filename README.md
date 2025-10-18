@@ -141,7 +141,7 @@ Maintained by **Tassiana Lamatina** — a product professional with experience b
 
 ## Disclaimer
 
-- This is a demo with **mock data**—no financial advice; no affiliation with Charles Schwab or PenChecks Trust.
+- This is a demo with **mock data**—no financial advice; no affiliation with Charles Schwab.
 - Brand names are referenced for demonstration only.
 
 ---
